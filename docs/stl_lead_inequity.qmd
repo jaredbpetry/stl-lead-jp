@@ -1,0 +1,59 @@
+---
+title: "stl_lead_inequity.qmd"
+format: html
+editor: visual
+---
+
+### Library chunk
+
+```{r}
+library(janitor)
+library(tidyverse)
+library(skimr)
+library(here)
+```
+
+### Read in Data and clean up
+
+```{r}
+stl_lead <- read_csv(here::here("data", "stl_blood_lead_commas.csv")) %>% 
+  clean_names()
+```
+
+### Basic Exploration
+
+```{r}
+head(stl_lead)
+tail(stl_lead)
+skim(stl_lead)
+```
+
+### Create new column that is the proportion of white entries 
+
+```{r}
+stl_lead_prop <- stl_lead %>%
+  mutate(prop_white = white / total_pop * 100)
+
+#---this is going to 1. create and store a new data frame, 2. that new data frame is the old one piped into the mutate function which we tell to add a new column which we define accordingly
+```
+
+### Create graph of those in each census tract with elevated lead versus those identifying as white 
+
+is there a way to change the dimensions of this plot within the html render? seems to be ignoring the height and width arguments
+
+```{r}
+
+stl_lead_plot <- ggplot(data = stl_lead_prop, aes(x = pct_elevated, y = prop_white), height = 7, width = 1) +
+  geom_point(aes(color = pct_elevated))
+stl_lead_plot
+
+```
+
+we are noticing what appears to be (without actually determining a level of correlation) a negative correlation between those identifying as white and those with elevated lead in their blood. This means that as the elevated lead levels increase, the population proportion white decreases
+
+### Create histogram of pct elevated 
+
+```{r}
+elevated_hist <- ggplot(data = stl_lead_prop, aes(x = pct_elevated)) + geom_histogram(binwidth = 1)
+elevated_hist
+```
