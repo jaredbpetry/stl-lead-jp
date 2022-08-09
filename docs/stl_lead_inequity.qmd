@@ -51,9 +51,17 @@ stl_lead_plot
 
 we are noticing what appears to be (without actually determining a level of correlation) a negative correlation between those identifying as white and those with elevated lead in their blood. This means that as the elevated lead levels increase, the population proportion white decreases
 
+### Also save a png of the graph to the figs folder (6 x 5)
+
+```{r}
+ggsave(here::here("figs", "great_graph.png"), height = 5, width = 6)
+```
+
 ### Create histogram of pct elevated 
 
 ```{r}
 elevated_hist <- ggplot(data = stl_lead_prop, aes(x = pct_elevated)) + geom_histogram(binwidth = 1)
 elevated_hist
 ```
+
+here's a random change
